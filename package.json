@@ -9,7 +9,6 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "postinstall": "curl -s https://raw.githubusercontent.com/reactorcore/pomander/master/bin/install | bash",
     "start": "node server/basic-server.js",
     "start:es6": "babel-node server/basic-server.js",
     "test": "mocha server/spec",
