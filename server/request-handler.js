@@ -32,26 +32,30 @@ exports.requestHandler = function(request, response) {
     // If no roomname on message, add it to roomname = lobby.
     // Else push message into messageObj[roomname].
 
-  var messageObj = {lobby: {}};
-
+  var messageObj = {}; //{lobby: [[username, message], [username1, message1]]};
   var message = '';
   request.on('data', (chunk) => {
     message += chunk;
-  }).on('end', () => {
-    /*if (messageObj[message.username]) {
-      if(messageObj[roomname] === message.roomname){
-        messageObj[username].push(message.text)
-      } else {
-        messageObj.lobby[username].push(message.text);
-      }
+  }).on('end', (chunk) => {
+    try  {
+      message = JSON.parse(message);
+    } catch (error) {
+      console.log(`error: ${error.message}`);
+    }
+    //check to see if the user provided a room, if not, lobby is assigned as default
+    if (!message.roomname) {
+      message.roomname = 'lobby';
+    }
+    //check if the message object contains a key with the roomname
+    if (messageObj[message.roomname]) {
+      //if so, push username:message to key
+      messageObj[message.roomname].push([message.username, message.text]);
     } else {
-      if(messageObj[roomname] === message.roomname){
-        messageObj[username] = [message.text];
-      } else {
-        messageObj.lobby[username] = [message.text];
-      }
-    }*/
-    console.log(message);
+    //if not
+      //make new key and assign it to username:message
+      messageObj[message.roomname] = [message.username, message.text];
+    }
+    console.log(messageObj);
   });
 
   // The outgoing status.
@@ -64,7 +68,7 @@ exports.requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'text/plain';
+  headers['Content-Type'] = 'application/JSON';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -77,7 +81,7 @@ exports.requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end('Hello, World!');
+  response.end('This is changed!');
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
