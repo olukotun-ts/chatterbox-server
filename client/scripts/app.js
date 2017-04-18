@@ -16,7 +16,7 @@
 var app = {
 
   init: function() {
-    app.server = 'http://parse.hrr.hackreactor.com/chatterbox/classes/messages';
+    app.server = 'http://127.0.0.1:3000';
     app.rooms = {};
     app.$roomName;
     app.messages = [];
@@ -91,6 +91,7 @@ var app = {
       type: 'GET',
       contentType: 'application/json',
       success: function (data) {
+        console.log('sucess', data);
         app.messages = data.results;
         app.clearMessages();
         app.renderMessages();

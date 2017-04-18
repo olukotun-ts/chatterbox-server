@@ -11,8 +11,8 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
-exports.requestHandler = requestHandler;
-var requestHandler = function(request, response) {
+
+exports.requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
   // They include information about both the incoming request, such as
@@ -28,6 +28,31 @@ var requestHandler = function(request, response) {
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
+  // Create obj to hold messages. {roomname: [username: [message1, message2]}
+    // If no roomname on message, add it to roomname = lobby.
+    // Else push message into messageObj[roomname].
+
+  var messageObj = {lobby: {}};
+
+  var message = '';
+  request.on('data', (chunk) => {
+    message += chunk;
+  }).on('end', () => {
+    /*if (messageObj[message.username]) {
+      if(messageObj[roomname] === message.roomname){
+        messageObj[username].push(message.text)
+      } else {
+        messageObj.lobby[username].push(message.text);
+      }
+    } else {
+      if(messageObj[roomname] === message.roomname){
+        messageObj[username] = [message.text];
+      } else {
+        messageObj.lobby[username] = [message.text];
+      }
+    }*/
+    console.log(message);
+  });
 
   // The outgoing status.
   var statusCode = 200;
@@ -67,7 +92,7 @@ var requestHandler = function(request, response) {
 var defaultCorsHeaders = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
+  'access-control-allow-headers': 'content-type, accept, X-Parse-Application-Id, X-Parse-REST-API-Key',
   'access-control-max-age': 10 // Seconds.
 };
 
