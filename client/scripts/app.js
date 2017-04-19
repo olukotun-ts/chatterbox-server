@@ -16,7 +16,7 @@
 var app = {
 
   init: function() {
-    app.server = 'http://127.0.0.1:3000';
+    app.server = 'http://127.0.0.1:3000/classes/messages';
     app.rooms = {};
     app.$roomName;
     app.messages = [];
